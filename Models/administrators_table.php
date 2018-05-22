@@ -30,5 +30,15 @@
             $rs = $this->doQuery($query, $param);
             return $rs;
         }
+		public function AddAdmin($email,$pass,$first,$last){
+			$sql = "INSERT INTO Administrators(emailAddress, password, firstName, lastName) VALUES (?,?,?,?)";
+			$param = array();
+            $param[] = $email;
+			$param[]=md5($pass);
+			$param[]=$first;
+			$param[]=$last;
+            $rs = $this->doQuery($query, $param);
+            return $rs;	
+		}
     }
 ?>
