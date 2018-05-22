@@ -2,6 +2,7 @@
 include_once '../Models/database.php';
 include_once '../Models/categories_table.php';
 include_once '../Models/products_table.php';
+include_once('../Models/administrators_table.php');
 include_once '../Controllers/app_controller.php';
 include_once '../Errors/mvc_exception.php';
 

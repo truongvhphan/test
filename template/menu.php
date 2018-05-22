@@ -1,5 +1,5 @@
 <?php
-ob_start();
+ob_start(); //Bien luu = chuoi
 ?>
 <div class="row bg-dark">
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
