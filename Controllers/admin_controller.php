@@ -2,6 +2,7 @@
 include_once '../Models/database.php';
 include_once '../Models/categories_table.php';
 include_once '../Models/products_table.php';
+include_once('../Models/administrators_table.php');
 include_once '../Controllers/app_controller.php';
 include_once '../Errors/mvc_exception.php';
 
@@ -20,6 +21,7 @@ switch($action){
             
             $tableDB = new Database();
             $tables = $tableDB->getTables();
+            
             $view = AppController::View();
             if(file_exists($view) == false)
                 throw new MVCException('Không tồn tại tập tin ' . $view);
@@ -39,6 +41,9 @@ switch($action){
         break;
     case 'add_product':
         header('Location: ../Controllers/product_controller.php?action=add_product_form');
+        break;
+    case 'add_customer':
+        header('Location: ../Controllers/customers_controller.php?action=add_customer_form');
         break;
 }
  

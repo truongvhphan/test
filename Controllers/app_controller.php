@@ -1,4 +1,5 @@
 <?php   
+//requail c?t l?y admin
 class AppController{
     public static function View($menu=null)
     {

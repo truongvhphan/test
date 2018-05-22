@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of product_controller
- *
- * @author truongtram
- */
 include_once '../Models/database.php';
 include_once '../Models/products_table.php';
 include_once '../Models/categories_table.php';
