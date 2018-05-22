@@ -1,4 +1,5 @@
 <?php 
+include_once("../Models/database.php");
     class Administrators extends Database{
         private $adminID;
         private $email;
