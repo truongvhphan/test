@@ -4,8 +4,8 @@
  *
  * @author truongtram
  */
-include_once '../Models/database.php';
-include_once("../Models/administrators_table.php");
+//include_once '../Models/database.php';
+//include_once("../Models/administrators_table.php");
 include_once '../Controllers/app_controller.php';
 include_once '../Errors/mvc_exception.php';
 include_once '../Libs/page_lib.php';

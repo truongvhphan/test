@@ -1,10 +1,6 @@
 <?php
-include_once '../Models/database.php';
-include_once '../Models/products_table.php';
-include_once '../Models/categories_table.php';
-include_once '../Controllers/app_controller.php';
-include_once '../Errors/mvc_exception.php';
-include_once '../Libs/page_lib.php';
+include_once '../Config/bootload.php';
+
 
 $action = filter_input(INPUT_POST, 'action');
 if($action == NULL){
@@ -19,19 +15,19 @@ switch ($action){
         try{
             $tablesDB = new Database();
             $tables = $tablesDB->getTables();
-            $productDB = new ProductModel();
+            $productDB = new Products();
             $start = 0;
             if(isset($_GET['start'])){
                 $start = $_GET['start'];
             }
             $rsProducts = $productDB->getProducts($start);
             $rsProductPage =  $productDB->getProducts();
-            $view = AppController::View();
+            $view = Page::View();
             if(file_exists($view) == false)
                 throw new MVCException('Tập tin không tồn tại' . $view);
             else
             {
-                $categories_model = new CategoryModel();
+                $categories_model = new Categories();
                 $rsCategories = $categories_model->getCategories();
                 $pagination = Page::createPagination($rsProductPage);
                 $GLOBALS['template']['menu'] = include_once '../template/menu.php';
@@ -46,77 +42,97 @@ switch ($action){
         }
         break;
     break;
-    case 'add_product_form':
-        try{
-            $tablesDB = new Database();
-            $tables = $tablesDB->getTables();
-            $categoryModel = new CategoryModel();
-            $rsCategory = $categoryModel->getCategories();
-            $view = AppController::View();
-            if(!file_exists($view))
-                throw new MVCException('Tập tin không tồn tại ' . $view);
-            else
-            {
-                $GLOBALS['template']['menu'] = include_once '../template/menu.php';
-                $GLOBALS['template']['content'] = include_once $view;
-                $GLOBALS['template']['title'] = 'Add New Product';
-                include_once '../template/index.php';
+    case 'add':
+        $check_form_post = filter_input(INPUT_POST,'submit');
+        if($check_form_post == null){
+            try{
+                $tablesDB = new Database();
+                $tables = $tablesDB->getTables();
+                $categoryModel = new Categories();
+                $rsCategory = $categoryModel->getCategories();
+                $view = Page::View();
+                if(!file_exists($view))
+                    throw new MVCException('Tập tin không tồn tại ' . $view);
+                else
+                {
+                    $GLOBALS['template']['menu'] = include_once '../template/menu.php';
+                    $GLOBALS['template']['content'] = include_once $view;
+                    $GLOBALS['template']['title'] = 'Add New Product';
+                    include_once '../template/index.php';
+                }
+            }
+            catch(MVCException $e){
+                
             }
         }
-        catch(MVCException $e){
-            
-        }
-        break;
-    case 'add_product_db':
-        if(isset($_POST['categoryID'])&&isset($_POST['productCode'])&&isset($_POST['productName'])&&isset($_POST['price']))
+        else
         {
             $categoryID = $_POST['categoryID'];
             $productCode = $_POST['productCode'];
             $productName = $_POST['productName'];
+            $description = $_POST['description'];
+            $discountPercent = $_POST['discountPercent'];
             $price = $_POST['price'];
-            $productModel = new ProductModel();
-            $productModel->insertNewProducts($categoryID,$productCode,$productName,$price);
+            $date_class = new DateTime();
+            $date = $date_class->format('Y-m-d H:i:s');
+            $productModel = new Products();
+            $productModel->insertNewProducts($categoryID,$productCode,$productName,$description,$price, $discountPercent,$date);
             header('Location: products_controller.php');
         }
         break;
-    case 'edit_product_form':
-        try{
-            $tablesDB = new Database();
-            $tables = $tablesDB->getTables();
-            $category_model = new CategoryModel();
-            $rsCategory = $category_model->getCategories();
-            $model = new ProductModel();
-            $rsProduct = $model->getProductByID($_GET['product_id']);
-            $view = AppController::View();
-            if(file_exists($view) == false)
-                throw new MVCException('Không tồn tại tập tin ' . $view);
-            else
+    case 'edit':
+        $check_form_post = filter_input(INPUT_POST, 'submit');
+        if($check_form_post == null){
+            try{
+                $tablesDB = new Database();
+                $tables = $tablesDB->getTables();
+                $category_model = new Categories();
+                $rsCategory = $category_model->getCategories();
+                $model = new Products();
+                $rsProduct = $model->getProductByID($_GET['product_id']);
+                $view = Page::View();
+                if(file_exists($view) == false)
+                    throw new MVCException('Không tồn tại tập tin ' . $view);
+                else
+                {
+                    $GLOBALS['template']['menu'] = include_once '../template/menu.php';
+                    $GLOBALS['template']['content'] = include_once $view;
+                    $GLOBALS['template']['title'] = 'Edit Product';
+                    include_once '../template/index.php';
+                }   
+            }catch(MVCException $e)
             {
-                $GLOBALS['template']['menu'] = include_once '../template/menu.php';
-                $GLOBALS['template']['content'] = include_once $view;
-                $GLOBALS['template']['title'] = 'Edit Product';
-                include_once '../template/index.php';
-            }   
-        }catch(MVCException $e)
+                
+            }
+        }
+        else
         {
-            
+            $categoryId = $_POST['categoryID'];
+            $productCode = $_POST['productCode'];
+            $productName = $_POST['productName'];
+            $description = $_POST['description'];
+            $listPrice = $_POST['listPrice'];
+            $discountPercent = $_POST['discountPercent'];
+            $id = $_POST['id'];
+            $model = new Products();
+            $model->editProduct($categoryId, $productCode, $productName, $description, $listPrice, $discountPercent, $id);
+            header('Location: products_controller.php');    
         }
         break;
-    case 'edit_product_db':
-        $categoryId = $_POST['categoryID'];
-        $productCode = $_POST['productCode'];
-        $productName = $_POST['productName'];
-        $listPrice = $_POST['listPrice'];
-        $id = $_POST['id'];
-        $model = new ProductModel();
-        $model->editProduct($categoryId, $productCode, $productName, $listPrice, $id);
-        header('Location: admin_controller.php');
-        break;
-    case 'delete_product':
-        $id = $_GET['product_id'];
-        $productModel = new ProductModel();
-        $productModel->DeleteProduct($id);
-        header('Location: admin_controller.php');
+    case 'delete':
+        if(!isset($_GET['confirm'])){
+            if(isset($_GET['product_id'])){
+                MessageBox::Show('Bạn có muốn xóa sản phẩm?', MB_CONFIRM);
+            }
+        }
+        else{
+            if($_GET['confirm'] == true){
+                $id = $_GET['product_id'];
+                $productModel = new Products;
+                $productModel->DeleteProduct($id);
+                header('Location: products_controller.php');
+            }
+        }
         break;
     
 }

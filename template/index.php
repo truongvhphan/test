@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <head>
 	<meta http-equiv="content-type" content="text/html" />
-	<meta name="author" content="nguyenvanthieu" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>
     <?php
         if(isset($GLOBALS['template']['title'])){
@@ -10,6 +11,12 @@
     ?>
     </title>
     <link type="text/css" rel="stylesheet" href="../views/css/bootstrap.min.css"  />
+    <link type="text/css" rel="stylesheet" href="../views/css/styles.css"  />
+     <script src="../views/js/jquery.js"> </script>
+    <script src="../views/js/bootstrap.min.js"></script>
+    <script src="../views/js/jquery.validate.js"></script>
+    <script src="../views/js/script.js"></script>
+    
 </head>
 
 <body>
@@ -28,9 +35,6 @@
         echo $GLOBALS['template']['content'];
     }
 ?>
-    </div>
-
-    <script src="../views/js/jquery.js"> </script>
-    <script src="../views/js/bootstrap.min.js"></script>
+    </div> 
 </body>
 </html>

@@ -6,5 +6,6 @@
  * and open the template in the editor.
  */
 
-define('PROJECT_PATH', 'http://localhost/MVC/');
+include_once 'Config/bootload.php';
+header('Location: Controllers/admin_controller.php');
 
