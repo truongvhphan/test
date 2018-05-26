@@ -1,11 +1,6 @@
 <?php
 include_once '../Config/bootload.php';
-//include_once '../Models/database.php';
-//include_once '../Models/categories_table.php';
-//include_once '../Models/products_table.php';
-//include_once('../Models/administrators_table.php');
-//include_once '../Controllers/app_controller.php';
-//include_once '../Errors/mvc_exception.php';
+
 
 
 $action = filter_input(INPUT_POST, 'acion');
@@ -36,16 +31,7 @@ switch($action){
             
         }
         break;
-    case 'add_category':
-        //Chuyển sang category_controller.php xử lý yêu cầu
-        header('Location: ../Controllers/category_controller.php?action=add_category_form');
-        break;
-    case 'add_product':
-        header('Location: ../Controllers/product_controller.php?action=add_product_form');
-        break;
-    case 'add_customer':
-        header('Location: ../Controllers/customers_controller.php?action=add_customer_form');
-        break;
+   
 }
  
     

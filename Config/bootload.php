@@ -6,7 +6,6 @@ include_once '../Errors/mvcexception.php';
  */
 
 spl_autoload_register(function ($class) {
-    try{
     $model_dir = '../Models/' . $class . '_table.php';
     if(file_exists($model_dir) == true){
         include_once $model_dir;
@@ -18,6 +17,6 @@ spl_autoload_register(function ($class) {
     $error_dir = '../Errors/' . $class . '.php';
     if(file_exists($error_dir) == true)
         include_once $error_dir;
-    }catch(MVCException $e){}
+    
 });
 ?>

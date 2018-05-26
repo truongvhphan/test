@@ -5,7 +5,5 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-include_once 'Config/bootload.php';
 header('Location: Controllers/admin_controller.php');
-
+?>
