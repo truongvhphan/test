@@ -1,19 +1,24 @@
 <?php
 class Database{
-    private $dsn = 'mysql:dbname=my_guitar_shop2;host=localhost';
-    private $username = 'root';
+    //private $dsn = 'mysql:dbname=my_guitar_shop2;host=localhost';
+    private $dsn = '';
+    private $username = '';
     private $password = '';
     private $conn = null;
 
     public function __construct() {
         try{
+            $config = parse_ini_file('../Config/config.ini', true);
+            $this->dsn = 'mysql:dbname=' . $config['database']['name'] . ';host=' . $config['database']['host'];
+            $this->username = $config['database']['username'];
+            $this->password = $config['database']['password'];
             $this->conn = new PDO($this->dsn, $this->username, $this->password);
             
         } catch (PDOException $ex) {
-            $error_message = $ex->getMessage();
+            $message = $ex->getMessage();
             $error_file = $ex->getFile();
             $error_line = $ex->getLine();
-            $GLOBALS['template']['content'] = include_once '../Errors/database_error.php';
+            $GLOBALS['template']['content'] = include_once '../Errors/404.php';
             $GLOBALS['template']['title'] = 'MVC Error';
             include_once '../template/index.php';
             exit();

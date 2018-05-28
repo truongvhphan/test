@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-class ProductModel extends Database{
+class Products extends Database{
     
     public function __construct() {
         parent::__construct();
@@ -26,23 +26,32 @@ class ProductModel extends Database{
         $rs = $this->doQuery($sql, $param);
         return $rs;
     }
-    public function insertNewProducts($category_ID, $productCode, $productName, $listPrice){
-        $query = 'INSERT INTO products(categoryID, productCode, productName, listPrice)';
-        $query.= ' VALUES(?, ?, ?, ?)';
+    public function insertNewProducts($category_ID, $productCode, $productName, $description, $listPrice, $discountPercent, $date){
+        $query = 'INSERT INTO products(categoryID, productCode, productName, description, listPrice, discountPercent, dateAdded)';
+        $query.= ' VALUES(?, ?, ?, ?, ?, ?, ?)';
         $param = array();
         $param[] = $category_ID;
         $param[] = $productCode;
         $param[] = $productName;
+        $param[] = $description;
         $param[] = $listPrice;
+        $param[] = $discountPercent;
+        $param[] = $date;
         $this->doQuery($query, $param);
     }
-    public function editProduct($category_ID, $productCode, $productName, $listPrice, $id){
-        $query = 'UPDATE products SET categoryID = ?, productCode = ?, productName = ?, listPrice = ? WHERE productID=?';        
+    public function editProduct($category_ID, $productCode, $productName, $description, $listPrice, $discountPercent, $id){
+        $query = 'UPDATE products 
+                  SET categoryID = ?, productCode = ?, 
+                      productName = ?, description=?, 
+                      listPrice = ?, discountPercent=? 
+                  WHERE productID=?';        
         $param = array();
         $param[] = $category_ID;
         $param[] = $productCode;
         $param[] = $productName;
+        $param[] = $description;
         $param[] = $listPrice;
+        $param[] = $discountPercent;
         $param[] = $id;
         $this->doQuery($query, $param);
     }

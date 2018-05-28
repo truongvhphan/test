@@ -6,5 +6,5 @@
  * and open the template in the editor.
  */
 
-define('PROJECT_PATH', 'http://localhost/MVC/');
-
+header('Location: Controllers/admin_controller.php');
+?>

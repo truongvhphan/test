@@ -1,5 +1,5 @@
 <?php
-class CategoryModel extends Database{
+class Categories extends Database{
     private $categoryId;
     private $categoryName;
     public function __construct() {
@@ -18,8 +18,13 @@ class CategoryModel extends Database{
     public function getCategoryname(){
         return $this->categoryName;
     }
-    public function getCategories(){   
-        $query = 'SELECT * FROM categories';
+    public function getCategories($start = null, $limit = 5){
+        if($start == null){
+            $query = 'SELECT * FROM categories';
+        }
+        else{
+            $query = "SELECT * FROM categories LIMIT $start, $limit";
+        }
         $rs = $this->doQuery($query);
         return $rs;
     }

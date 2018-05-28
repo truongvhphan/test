@@ -1,8 +1,6 @@
 <?php
-include_once '../Models/database.php';
-include_once '../Models/categories_table.php';
-include_once 'app_controller.php';
-include_once '../Errors/mvc_exception.php';
+include_once '../Config/bootload.php';
+
 
 $action = filter_input(INPUT_POST, 'action');
 if($action == NULL){
@@ -16,13 +14,20 @@ switch ($action){
         try{
             $tablesDB = new Database();
             $tables = $tablesDB->getTables();
-            $view = AppController::View();
+            $view = Page::View();
             if(file_exists($view) == false)
                 throw new MVCException('Tập tin không tồn tại' . $view);
             else
             {
-                $categories_model = new CategoryModel();
-                $rsCategories = $categories_model->getCategories();
+                if(isset($_GET['start']))
+                    $start = $_GET['start'];
+                else
+                    $start = null;
+                    
+                $categories_model = new Categories();
+                $rsCategories = $categories_model->getCategories($start);
+                $rsPage = $categories_model->getCategories();
+                $pagination = Page::createPagination($rsPage);
                 $GLOBALS['template']['menu'] = include_once '../template/menu.php';
                 $GLOBALS['template']['content'] = include_once $view;
                 $GLOBALS['template']['title'] = 'Categories List';
@@ -35,60 +40,81 @@ switch ($action){
         }
         break;
     break;
-    case 'add_category_form':
-        try{
-            $view = AppController::View();
-            if(file_exists($view) == false)
-                throw new MVCException('Tập tin không tồn tại' . $view);
-            else
-            {
-                $GLOBALS['template']['content'] = include_once $view;
-                $GLOBALS['template']['title'] = 'Add New Category';
-                include_once '../template/index.php';
-            }
-        }
-        catch(MVCException $e)
+    case 'add':
+        $input = filter_input(INPUT_POST, 'category_name');
+        if($input == NULL)
         {
-            
-        }
-        break;
-    case 'add_category_db':
-        if(isset($_POST['category_name'])){
-            $category_model = new CategoryModel();
-            $category_model->insertNewCategory($_POST['category_name']);
-            header('Location: admin_controller.php');
-        }
-        break;
-    case 'delete_category_db':
-        if(isset($_GET['cate_id'])){
-            $category_id = $_GET['cate_id'];
-            $category_model = new CategoryModel();
-            $category_model->deleteCategory($category_id);
-            header('Location: ../Admin/index.php');
-        }
-        break;
-    case 'edit_category_form':
-        try{
-            $category_id = $_GET['cate_id'];
-            $category_model = new CategoryModel();
-            $rsCategory = $category_model->getCategoryByID($category_id);
-            $view = AppController::View();
-            if(file_exists($view) == false)
-                throw new MVCException('Không tìm thấy tập tin ' . $view);
-            else
-            {
-                $GLOBALS['template']['content'] = include_once $view;
-                $GLOBALS['template']['title'] = 'Edit Category';
-                include_once '../template/index.php';
+            try{
+                $view = Page::View();
+                if(file_exists($view) == false)
+                    throw new MVCException('Tập tin không tồn tại' . $view);
+                else
+                {
+                    $tablesDB = new Database();
+                    $tables = $tablesDB->getTables();
+                    $GLOBALS['template']['menu'] = include_once '../template/menu.php';
+                    $GLOBALS['template']['content'] = include_once $view;
+                    $GLOBALS['template']['title'] = 'Add New Category';
+                    include_once '../template/index.php';
+                }
             }
-        }catch(MVCException $e){}
+            catch(MVCException $e)
+            {
+                
+            }
+        }
+        else
+        {
+            $category_model = new Categories();
+            $category_model->insertNewCategory($input);
+            header('Location: categories_controller.php');
+        }
         break;
-    case 'edit_category_db':
-        $category_id = $_POST['category_id'];
-        $category_name = $_POST['category_name'];
-        $category_model = new CategoryModel();
-        $category_model->editCategory($category_name, $category_id);
-        header('Location: admin_controller.php');
+    
+    case 'delete':
+        if(!isset($_GET['confirm'])){
+            if(isset($_GET['cate_id'])){
+                MessageBox::Show('Bạn có muốn xóa không?', MB_CONFIRM);
+            }
+        }
+        else
+        {
+            if($_GET['confirm'] == true){
+                $category_id = $_GET['cate_id'];
+                $category_model = new Categories;
+                $category_model->deleteCategory($category_id);
+                header('Location: categories_controller.php');
+            }
+        }
+        break;
+    case 'edit':
+        $input = filter_input(INPUT_POST, 'category_name');
+        if($input == NULL){
+            try{
+                $category_id = $_GET['cate_id'];
+                $category_model = new Categories();
+                $rsCategory = $category_model->getCategoryByID($category_id);
+                $view =  Page::View();
+                if(file_exists($view) == false)
+                    throw new MVCException('Không tìm thấy tập tin ' . $view);
+                else
+                {
+                    $tablesDB = new Database();
+                    $tables = $tablesDB->getTables();
+                    $GLOBALS['template']['menu'] = include_once '../template/menu.php';
+                    $GLOBALS['template']['content'] = include_once $view;
+                    $GLOBALS['template']['title'] = 'Edit Category';
+                    include_once '../template/index.php';
+                }
+            }catch(MVCException $e){}
+        }
+        else{
+            $category_id = $_POST['category_id'];
+            $category_name = $_POST['category_name'];
+            $category_model = new Categories();
+            $category_model->editCategory($category_name, $category_id);
+            header('Location: categories_controller.php');    
+        }
         break;
 }
 
