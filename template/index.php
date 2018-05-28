@@ -9,7 +9,10 @@
         } 
     ?>
     </title>
-    <link type="text/css" rel="stylesheet" href="../views/css/bootstrap.min.css"  />
+    <link type="text/css" rel="stylesheet" href="../views/css/bootstrap.min.css"/> 
+     <script src="../views/js/jquery.js"> </script>
+    <script src="../views/js/bootstrap.min.js"></script>       
+    <script src="../Views/js/jquery.validate.min.js"></script>
 </head>
 
 <body>
@@ -28,9 +31,8 @@
         echo $GLOBALS['template']['content'];
     }
 ?>
-    </div>
+    </div>     
+   
 
-    <script src="../views/js/jquery.js"> </script>
-    <script src="../views/js/bootstrap.min.js"></script>
 </body>
 </html>

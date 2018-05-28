@@ -3,7 +3,7 @@ ob_start();
 
 ?>
 <h1>Danh Mục Sản Phẩm</h1>
-<a href="?action=add_customer_form" class="btn btn-success">Thêm mới sản phẩm</a>
+<a href="?action=add_customer" class="btn btn-success">Thêm mới sản phẩm</a>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -29,7 +29,7 @@ ob_start();
         echo '<td>' . $customer->shipAddressID . '</td>';
         echo '<td>'. $customer->billingAddressID . '</td>';
         echo '<td><a href="../Controllers/customers_controller.php?action=delete_customer&customer_id=' . $customer->customerID . '">Delete</a></td>';
-        echo '<td><a href="../Controllers/customers_controller.php?action=edit_customer_form&customer_id=' . $customer->customerID . '">Edit</a></td>';
+        echo '<td><a href="../Controllers/customers_controller.php?action=edit_customer&customer_id=' . $customer->customerID . '">Edit</a></td>';
         echo '</tr>';
     }
 ?>
