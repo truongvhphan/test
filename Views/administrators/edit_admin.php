@@ -4,17 +4,13 @@ ob_start();
 <script>
 	//Bẫy lỗi form add dùng jquery validation
 	$().ready(function() {
-        var validator = $("#formAddAdmin").validate({
+        var validator = $("#formEdit").validate({
 			errorPlacement: function(error,element){
 				$(element)
 					.closest("form").find("label[for='" + element.attr("id") + "_error']").append(error);	
 			},
 			errorElement: "span",
 			messages: {
-				pass_admin:{
-					required: " (Không được để trống)",
-					minlength: " (Độ dài từ 5 ký tự trở lên)"
-				},
 				first_admin: {
 					required: " (Không được để trống)",
 					minlength: " (Độ dài từ 3 ký tự trở lên)"	
@@ -40,44 +36,37 @@ ob_start();
 		})
     });
 </script>
-    <h1>Them Administrators</h1>
-        <form id="formAddAdmin"  method="post" action="?action=<?php echo $_GET['action']; ?>" enctype="multipart/form-data">
+    <h1>Cập nhật dữ liệu administrator</h1>
+        <form id="formEdit" method="post" action="?action=edit_admin">
+            <input type="hidden" 
+                   name="adminID" 
+                   value="<?php echo $rsAdmins[0]->adminID;?>"/>
             <table>
                 <tr>
                     <td><label for="email_admin">EmailAddress</label></td>
                     <td>
-                        <input type="email" name="email_admin" id="email_admin" class="form-control"/>
+                        <input id="email_admin" type="text" name="email_admin" value="<?php echo $rsAdmins[0]->emailAddress;?>"/>
                         <label for="email_admin_error" class="form-error"></label>
                     </td>
                 </tr>
                 <tr>
-                    <td>Password</td>
+                    <td>first Name</td>
                     <td>
-                        <input type="password" name="Password" id="pass_admin" class="form-control" required minLength="5"/>
-                        <label for="pass_admin_error" style="color:#F00"></label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>firstName</td>
-                    <td>
-                        <input type="text" name="firstName" id="first_admin" class="form-control" required minLength="3"/>
+                        <input type="text" id="first_admin" name="first" value="<?php echo $rsAdmins[0]->firstName;?>" required minLength="3"/>
                         <label for="first_admin_error" style="color:#F00"></label>
                     </td>
                 </tr>
                 <tr>
-                    <td>lastName</td>
+                    <td>Last name</td>
                     <td>
-                        <input type="text" name="lastName" id="last_admin" class="form-control" required minLength="3"/>
+                        <input type="text" id="last_admin" name="last" value="<?php echo $rsAdmins[0]->lastName;?>" required minLength="3"/>
                         <label for="last_admin_error" style="color:#F00"></label>
                     </td>
                 </tr>
-                <tr>
-                	<td>Image</td>
-                    <td><input  type="file" name="upload"/></td>
-                </tr>
+                
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="Them moi" name="submit"/>
+                        <input type="submit" value="Cập nhật" name="submit"/>
                     </td> 
                 </tr>
             </table>
