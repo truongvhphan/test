@@ -139,11 +139,12 @@ switch ($action){
 	break;
 	
 	case "edit_pass":
-			$passht =md5($_POST['passht']);
+			$passht=md5($_POST['passht']);
 			$id = $_POST['adminID'];
+            print_r($_POST);
 			$admin_model = new Administrators();
-			$rs = $admin_model->getPassByID($passht,$id);
-			print_r($rs);
+			$rs = $admin_model->getPassByID($id, $passht);
+			
 			/*if($rs!=NULL)
 			{
 				$passnew = $_POST['passnew'];
