@@ -1,7 +1,7 @@
 <?php
 ob_start();
 ?>
-    <h1>Them du lieu product</h1>
+    <h1>Chỉnh sửa khách hàng</h1>
         <form method="post" action="?action=edit_customer_db">
             <input type="hidden" 
                    name="customerID" 
@@ -46,7 +46,7 @@ ob_start();
                 
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="C?p nh?t"/>
+                        <input type="submit" value="Cập nhật"/>
                     </td> 
                 </tr>
             </table>

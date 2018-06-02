@@ -1,9 +1,5 @@
 <?php 
-    include_once('../Models/database.php');
-    include_once('../Models/categories_table.php');
-    include_once('../Models/customers_table.php');
-    include_once '../Controllers/app_controller.php';
-    include_once '../Errors/mvc_exception.php';
+    include_once('../Config/bootload.php');
     
     $action = filter_input(INPUT_GET,'action');
     if($action == NULL)
@@ -19,14 +15,22 @@
         {
             $data = new Database();
             $tables = $data->getTables();
-            $customer = new CustomerModel();
-            $rsCustomer = $customer->getCustomer();
-            $view = AppController::View();
+            $customer = new Customers();
+            $start = 0;
+            if(isset($_GET['start'])){
+                $start = $_GET['start'];
+            }
+            $rsCustomer = $customer->getCustomer($start);
+            $rsCustomerPage = $customer->getCustomer();
+            $view = Page::View();
             if(file_exists($view)==false)
             {
                 throw new MVCException('file không tồn tại' . $view);
             }
             else
+                //Phân trang
+                $pagination = Page::createPagination($rsCustomerPage);
+                
                 $GLOBALS['template']['menu'] = include_once '../template/menu.php';
                 $GLOBALS['template']['content'] = include_once $view;
                 $GLOBALS['template']['title'] ='Customers List';
@@ -36,47 +40,62 @@
          catch(MVCException $e){}              
         break;
         case 'add_customer':
-        try
-        {
-            $data = new Database();
-            $tables = $data->getTables();
-            $customer = new CustomerModel();
-            $rsCustomer = $customer->getCustomer();
-             $view = AppController::View();
-            if(!file_exists($view))
+            $check_form_customer = filter_input(INPUT_POST,"submit");
+            if($check_form_customer==null)
             {
-                throw new MVCException('file không tồn tại' . $view);
+                try
+                {
+                    $data = new Database();
+                    $tables = $data->getTables();
+                    $customer = new Customers();
+                    $rsCustomer = $customer->getCustomer();
+                     $view = Page::View();
+                    if(!file_exists($view))
+                    {
+                        throw new MVCException('file không tồn tại' . $view);
+                    }
+                     else
+                     {
+                        $GLOBALS['template']['menu'] = include_once '../template/menu.php';
+                        $GLOBALS['template']['content'] = include_once $view;
+                        $GLOBALS['template']['title'] = 'Add New Customers';
+                        include_once '../template/index.php';
+                     }
+                }    
+                  catch(MVCException $e){}        
             }
-             else
-             {
-                $GLOBALS['template']['menu'] = include_once '../template/menu.php';
-                $GLOBALS['template']['content'] = include_once $view;
-                $GLOBALS['template']['title'] = 'Add New Customers';
-                include_once '../template/index.php';
-             }
-        }            
-        catch(MVCException $e){}
-        break;
-        case 'add_customer_db':
-        print_r($_POST);
+            else
+            {
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 $first = $_POST['firstname'];
                 $last = $_POST['lastname'];
                 $ship = $_POST['ship'];
                 $billing = $_POST['billing'];
-                $customer = new CustomerModel();
+                md5($password);
+                $customer = new Customers();
                 $customer->InsertCustomer($email,$password,$first,$last,$ship,$billing);
-                header('Location: customers_controller.php');   
+                header('Location: customers_controller.php'); 
+            }         
         break;
         
         case 'delete_customer':
-            if(isset($_GET['id']))
+            if(!isset($_GET['confirm']))
             {
-                $id = $_GET['id'];
-                $customer = new CustomerModel();
-                $customer->deleteCustomers($id);
-                header('Location: admin_controller.php');
+                if(isset($_GET['customer_id']))
+                {
+                    MessageBox::Show('Bạn có muốn xóa không ?',MB_CONFIRM);
+                }
+            }
+            else
+            {
+                if(isset($_GET['confirm'])==true)
+                {
+                    $id = $_GET['customer_id'];
+                    $customer = new Customers();
+                    $customer->deleteCustomers($id);
+                    header('Location: customers_controller.php');
+                }             
             }
         break;
         case 'edit_customer':
@@ -84,9 +103,9 @@
             {
                 $data = new Database();
                 $tables = $data->getTables();
-                $customer = new CustomerModel();
+                $customer = new Customers();
                 $rsCustomer = $customer->getCustomerByID($_GET['customer_id']);
-                 $view = AppController::View();
+                 $view = Page::View();
                 if(!file_exists($view))
                 {
                     throw new MVCException('file không tồn tại' . $view);
@@ -112,7 +131,7 @@
                     $last = $_POST['lastname'];
                     $ship = $_POST['ship'];
                     $billing = $_POST['billing'];
-                    $customer = new CustomerModel();
+                    $customer = new Customers();
                     $customer->UpdateCustomer($email,$password,$first,$last,$ship,$billing,$customerID);
                     header('Location: admin_controller.php');
                 }

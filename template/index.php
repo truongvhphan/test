@@ -10,20 +10,14 @@
         } 
     ?>
     </title>
-<<<<<<< HEAD
+
     <link type="text/css" rel="stylesheet" href="../views/css/bootstrap.min.css"/> 
      <script src="../views/js/jquery.js"> </script>
     <script src="../views/js/bootstrap.min.js"></script>       
     <script src="../Views/js/jquery.validate.min.js"></script>
-=======
-    <link type="text/css" rel="stylesheet" href="../views/css/bootstrap.min.css"  />
     <link type="text/css" rel="stylesheet" href="../views/css/styles.css"  />
-     <script src="../views/js/jquery.js"> </script>
-    <script src="../views/js/bootstrap.min.js"></script>
-    <script src="../views/js/jquery.validate.js"></script>
     <script src="../views/js/script.js"></script>
     
->>>>>>> 8dec01d46ee4f93e093bbaf13b833c23d69629a5
 </head>
 
 <body>
@@ -42,12 +36,9 @@
         echo $GLOBALS['template']['content'];
     }
 ?>
-<<<<<<< HEAD
+
     </div>     
    
-
-=======
     </div> 
->>>>>>> 8dec01d46ee4f93e093bbaf13b833c23d69629a5
 </body>
 </html>

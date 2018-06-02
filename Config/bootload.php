@@ -9,7 +9,7 @@ spl_autoload_register(function ($class) {
     $model_dir = '../Models/' . $class . '_table.php';
     if(file_exists($model_dir) == true){
         include_once $model_dir;
-    }
+    }   
     $lib_dir = '../Libs/' . $class . '_lib.php';
     if(file_exists($lib_dir) == true)
         include_once $lib_dir;
@@ -19,4 +19,5 @@ spl_autoload_register(function ($class) {
         include_once $error_dir;
     
 });
+
 ?>

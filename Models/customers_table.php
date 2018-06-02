@@ -1,6 +1,5 @@
 <?php 
-include_once("../Models/database.php");
-    class CustomerModel extends Database{
+    class Customers extends Database{
         private $id;
         private $email;
         private $pass;
@@ -27,9 +26,13 @@ include_once("../Models/database.php");
             $rs = $this->doQuery($query);
             return $rs;
         }
-        public function getCustomer()
+        public function getCustomer($start= -1, $limit=5)
         {
-            $query = 'select * from customers';
+            if($start == -1){
+                $query = 'select * from customers';
+            }
+            else
+                $query = 'select * from customers LIMIT ' .$start.','.$limit;           
             $rs =$this->doQuery($query);
             return $rs;
         }
@@ -46,7 +49,7 @@ include_once("../Models/database.php");
             $query ='insert into customers(emailAddress,password,firstName,lastName,shipAddressID,billingAddressID) Values(?,?,?,?,?,?)';
             $param = array();
             $param[]= $email;
-            $param[]= $pass;
+            $param[]= md5($pass);
             $param[] = $first;
             $param[] =$last;
             $param[] = $ship;

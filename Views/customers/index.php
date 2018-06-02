@@ -2,8 +2,8 @@
 ob_start();
 
 ?>
-<h1>Danh Mục Sản Phẩm</h1>
-<a href="?action=add_customer" class="btn btn-success">Thêm mới sản phẩm</a>
+<h1>Danh Sách Khách Hàng</h1>
+<a href="?action=add_customer" class="btn btn-success">Thêm mới Khách hàng</a>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -36,6 +36,7 @@ ob_start();
   
     </tbody>
 </table>
+<?php echo $pagination; ?>
 <?php
 return ob_get_clean();
 ?>

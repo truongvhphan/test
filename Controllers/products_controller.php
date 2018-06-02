@@ -29,7 +29,9 @@ switch ($action){
             {
                 $categories_model = new Categories();
                 $rsCategories = $categories_model->getCategories();
+                
                 $pagination = Page::createPagination($rsProductPage);
+                
                 $GLOBALS['template']['menu'] = include_once '../template/menu.php';
                 $GLOBALS['template']['content'] = include_once $view;
                 $GLOBALS['template']['title'] = 'Categories List';

@@ -23,6 +23,7 @@ class Categories extends Database{
             $query = 'SELECT * FROM categories';
         }
         else{
+            //limit gioi h?n s? m?u tin c?n l?y, không l?y h?t
             $query = "SELECT * FROM categories LIMIT $start, $limit";
         }
         $rs = $this->doQuery($query);
